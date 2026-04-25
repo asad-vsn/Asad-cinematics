@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASAD CINEMATICS | Director & Editor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> 
+
+    <style>
+        :root { --primary: #ff4d00; --bg: #000; --card: #0a0a0a; --text: #fff; --glow: rgba(255, 77, 0, 0.4); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: var(--text); font-family: 'Poppins', sans-serif; overflow-x: hidden; scroll-behavior: smooth; } 
+
+        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border-bottom: 1px solid #111; }
+        .logo { font-family: 'Bebas Neue'; font-size: 2.2rem; letter-spacing: 2px; }
+        .logo span { color: var(--primary); }
+        .menu-btn { font-size: 2rem; cursor: pointer; transition: 0.3s; } 
+
+        .nav-overlay { position: fixed; top: 0; right: -100%; width: 100%; height: 100vh; background: rgba(0,0,0,0.98); display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 0.5s cubic-bezier(0.7, 0, 0.3, 1); z-index: 2000; }
+        .nav-overlay.active { right: 0; }
+        .nav-overlay a { font-family: 'Bebas Neue'; font-size: 3.5rem; color: white; text-decoration: none; margin: 15px 0; transition: 0.3s; }
+        .close-nav { position: absolute; top: 30px; right: 40px; font-size: 3.5rem; cursor: pointer; color: var(--primary); } 
+
+        .hero { height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #0e0e0e, #000); }
+        .hero-title { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 9rem); position: relative; white-space: nowrap; z-index: 1; }
+        .hero-title::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 140%; height: 140%; background: var(--primary); filter: blur(90px); opacity: 0.35; z-index: -1; animation: breathe 5s infinite ease-in-out; } 
+
+        section { padding: 100px 10%; }
+        .sec-title { font-family: 'Bebas Neue'; font-size: 4rem; color: var(--primary); margin-bottom: 60px; text-align: center; letter-spacing: 2px; }
+        
+        .about-container { display: flex; align-items: center; gap: 60px; flex-wrap: wrap; }
+        .profile-side { flex: 1; min-width: 300px; display: flex; justify-content: center; position: relative; }
+        
+        .profile-side img { width: 350px; height: 350px; border-radius: 50%; object-fit: cover; z-index: 2; position: relative; display: block; }
+        .profile-side::before { content: ''; position: absolute; width: 300px; height: 300px; background: var(--primary); filter: blur(100px); opacity: 0.4; border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; }
+        
+        .text-side { flex: 1.5; min-width: 350px; }
+        .text-side h2 { font-family: 'Bebas Neue'; font-size: 3rem; margin-bottom: 15px; color: var(--primary); }
+        .text-side p { line-height: 1.8; color: #bbb; margin-bottom: 30px; font-size: 1.1rem; } 
+
+        .expert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        .expert-box { background: #111; padding: 20px; text-align: center; border-radius: 12px; border: 1px solid #222; font-family: 'Bebas Neue'; font-size: 1.3rem; transition: 0.3s; } 
+
+        .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 40px; }
+        .work-card { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid #222; transition: 0.5s; display: flex; flex-direction: column; }
+        .work-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(255, 77, 0, 0.2); }
+        
+        .vid-frame { width: 100%; position: relative; padding-top: 56.25%; background: #000; overflow: hidden; }
+        .vid-frame iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; object-fit: contain; }
+        .work-info { padding: 20px; text-align: center; font-family: 'Bebas Neue'; font-size: 1.6rem; letter-spacing: 1px; background: #111; color: #fff; } 
+
+        .flex-contact { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 50px; margin-top: 50px; }
+        .booking-box { background: #0a0a0a; padding: 40px; border-radius: 25px; border: 1px solid #222; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--primary); font-family: 'Bebas Neue'; font-size: 1.2rem; }
+        .form-group input, .form-group select { width: 100%; padding: 15px; background: #151515; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
+        .btn-submit { width: 100%; padding: 18px; background: var(--primary); color: #fff; border: none; font-family: 'Bebas Neue'; font-size: 1.8rem; cursor: pointer; transition: 0.4s; border-radius: 10px; } 
+
+        .contact-info { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .contact-card { background: #111; padding: 30px; border-radius: 20px; width: 100%; border: 1px solid #222; margin-bottom: 20px; }
+        .contact-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+        .contact-card h4 { font-family: 'Bebas Neue'; font-size: 2rem; margin-bottom: 5px; }
+        .contact-card a { color: #ccc; text-decoration: none; transition: 0.3s; } 
+
+        @keyframes breathe { 0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 0.6; transform: translate(-50%, -50%) scale(1.1); } }
+        
+        @media (max-width: 768px) { .about-container { flex-direction: column; text-align: center; } .hero-title { font-size: 3.5rem; white-space: normal; } }
+    </style>
+</head>
+<body> 
+
+    <header>
+        <div class="logo">ASAD<span> CINEMATICS</span></div>
+        <div class="menu-btn" onclick="toggleNav()"><i class="fas fa-bars"></i></div>
+    </header> 
+
+    <div class="nav-overlay" id="nav">
+        <span class="close-nav" onclick="toggleNav()">×</span>
+        <a href="#about" onclick="toggleNav()">ABOUT ME</a>
+        <a href="#work" onclick="toggleNav()">MY PROJECTS</a>
+        <a href="#booking" onclick="toggleNav()">BOOKING</a>
+        <a href="https://www.instagram.com/1m.asad4u" target="_blank">MY WORK PAGE</a>
+    </div> 
+
+    <section class="hero">
+        <h1 class="hero-title" data-aos="zoom-in">ASAD CINEMATICS</h1>
+    </section> 
+
+    <section id="about">
+        <div class="about-container">
+            <div class="profile-side" data-aos="fade-right">
+                <img src="https://lh3.googleusercontent.com/d/1-v6EK-F_P_J5s-S7bQuPD3dBdKIKdro8" alt="Asad">
+            </div>
+            <div class="text-side" data-aos="fade-left">
+                <h2>MY VISION</h2>
+                <p>I aim to transform ideas into visually compelling stories that leave a lasting impact. My vision is to create cinematic experiences that go beyond simple edits — blending emotion, storytelling, and creativity into every frame.</p>
+                
+                <h2>WHO I AM</h2>
+                <p>I’m a video editor focused on cinematic storytelling, clean visuals, and engaging content. I work on transforming ideas into impactful videos that connect with the audience and leave a lasting impression.</p> 
+
+                <div class="expert-grid">
+                    <div class="expert-box">Cinematic Videos</div>
+                    <div class="expert-box">Storytelling Edits</div>
+                    <div class="expert-box">Sound Sync</div>
+                    <div class="expert-box">Color Grading</div>
+                    <div class="expert-box">Premium Covers</div>
+                    <div class="expert-box">Aesthetic Visuals</div>
+                    <div class="expert-box">Trending Edits</div>
+                    <div class="expert-box">Character Intros</div>
+                </div>
+            </div>
+        </div>
+    </section> 
+
+    <section id="work">
+        <h2 class="sec-title" data-aos="fade-up">SELECTED VISIONS</h2>
+        <div class="work-grid">
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1wJmV4YAuCkHFLO3awRRb4KqASNX1-stu/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Cinematic Film Edit</div>
+            </div>
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1B525-0rVdXmPGj7WssIc7I3MNlGD0oaX/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Hero Entry Scene Edit</div>
+            </div>
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1M2eRBbBXCfl58U2B88FrNdXaxSBwTA0K/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Introduction To Character</div>
+            </div>
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1eUCFxJHxfBPXMm3hoftVZX8r2y7f59Fk/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Trending Reels Edit</div>
+            </div>
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1QqoEWam-LjcydmkzH95qPDHd4B_zZx1p/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Cinematic Reel Edit</div>
+            </div>
+            <div class="work-card" data-aos="fade-up">
+                <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1B525-0rVdXmPGj7WssIc7I3MNlGD0oaX/preview" allow="autoplay"></iframe></div>
+                <div class="work-info">Movie Intro Edit</div>
+            </div>
+        </div>
+    </section> 
+
+    <section id="booking">
+        <div class="flex-contact">
+            <div class="booking-box" data-aos="fade-right">
+                <form id="finalForm">
+                    <div class="form-group"><label>Full Name</label><input type="text" id="fn" required></div>
+                    <div class="form-group"><label>Email Address</label><input type="email" id="em" required></div>
+                    
+                    <div class="form-group">
+                        <label>Which type of edit</label>
+                        <select id="editType" required>
+                            <option value="" disabled selected>Select Edit Style</option>
+                            <option value="Cinematic Edit">Cinematic Edit</option>
+                            <option value="Trending Edit">Trending Edit</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group"><label>Reference Link (Optional)</label><input type="url" id="rl"></div>
+                    <button type="submit" class="btn-submit">SUBMIT VISION</button>
+                </form>
+            </div>
+            <div class="contact-info" data-aos="fade-left">
+                <div class="contact-card"><i class="fas fa-envelope"></i><h4>Email</h4><p><a href="mailto:ahmadashad545@gmail.com">ahmadashad545@gmail.com</a></p></div>
+                <div class="contact-card"><i class="fab fa-instagram"></i><h4>Instagram</h4><p><a href="https://www.instagram.com/1m.asad4u" target="_blank">@1m.asad4u</a></p></div>
+            </div>
+        </div>
+    </section> 
+
+    <footer style="text-align:center; padding: 40px; color:#444; border-top: 1px solid #111;">© 2026 ASAD CINEMATICS</footer> 
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1200, once: true });
+        function toggleNav() { document.getElementById('nav').classList.toggle('active'); }
+        document.getElementById('finalForm').onsubmit = function(e) {
+            e.preventDefault();
+            const name = document.getElementById('fn').value;
+            const email = document.getElementById('em').value;
+            const type = document.getElementById('editType').value;
+            const link = document.getElementById('rl').value || "None provided";
+            
+            const text = `New Vision Received:\nName: ${name}\nEmail: ${email}\nEdit Type: ${type}\nLink: ${link}`;
+            window.open(`https://wa.me/9717494691?text=${encodeURIComponent(text)}`, '_blank');
+        };
+    </script>
+</body>
+</html>
