@@ -25,9 +25,58 @@
         .nav-overlay a { font-family: 'Bebas Neue'; font-size: 3.5rem; color: white; text-decoration: none; margin: 15px 0; transition: 0.3s; }
         .close-nav { position: absolute; top: 30px; right: 40px; font-size: 3.5rem; cursor: pointer; color: var(--primary); } 
 
-        .hero { height: 100vh; display: flex; justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle, #0e0e0e, #000); }
-        .hero-title { font-family: 'Bebas Neue'; font-size: clamp(3rem, 12vw, 9rem); position: relative; white-space: nowrap; z-index: 1; }
-        .hero-title::after { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 140%; height: 140%; background: var(--primary); filter: blur(90px); opacity: 0.35; z-index: -1; animation: breathe 5s infinite ease-in-out; } 
+        /* --- UPDATED HERO SECTION ONLY --- */
+        .hero { 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            position: relative;
+            overflow: hidden;
+            background: #000;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Magic Link for Background Photo */
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                        url('https://lh3.googleusercontent.com/d/1Qd_qJgTWSZpaR8uQMfp_F_rRUBGJfP52');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            animation: cinematicPop 2.5s ease-out forwards;
+        }
+
+        .hero-title { 
+            font-family: 'Bebas Neue'; 
+            font-size: clamp(3.5rem, 12vw, 9rem); 
+            color: #fff; /* White Font like 2nd image */
+            position: relative; 
+            z-index: 2; 
+            white-space: nowrap;
+            text-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            animation: fadeText 3s ease-out;
+        }
+        
+        .hero-title::after { 
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            width: 140%; height: 140%; background: var(--primary); filter: blur(90px); opacity: 0.35; z-index: -1; 
+            animation: breathe 5s infinite ease-in-out; 
+        } 
+
+        @keyframes cinematicPop {
+            0% { transform: scale(1.4); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeText {
+            0% { opacity: 0; filter: blur(10px); transform: translateY(30px); }
+            100% { opacity: 1; filter: blur(0); transform: translateY(0); }
+        }
+        /* --- END OF UPDATED SECTION --- */
 
         section { padding: 100px 10%; }
         .sec-title { font-family: 'Bebas Neue'; font-size: 4rem; color: var(--primary); margin-bottom: 60px; text-align: center; letter-spacing: 2px; }
@@ -146,22 +195,24 @@
             <div class="work-card" data-aos="fade-up">
                 <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1L7-lsXDHgYlH4nbVI8o7dadmbzxeGqEQ/preview" allow="autoplay"></iframe></div>
                 <div class="work-info">Cinematic Love Edit</div>
-        </div>
+            </div>
             <div class="work-card" data-aos="fade-up">
                 <div class="vid-frame"><iframe src="https://drive.google.com/file/d/11CPD5WxcUAtgvB-DMnFClUeOZy2r4v1w/preview" allow="autoplay"></iframe></div>
-               <div class="work-info">Master Movie Style Edit</div>
-                </div>
+                <div class="work-info">Master Movie Style Edit</div>
+            </div>
             <div class="work-card" data-aos="fade-up">
                 <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1bF3gRQO2nCfg5TwuMF5JNFUoxcqgBPUR/preview" allow="autoplay"></iframe></div>
                 <div class="work-info">Scenario Edit</div>
-          </div>
+            </div>
             <div class="work-card" data-aos="fade-up">
                 <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1G3EjzWG5_3OPc05m7JaWCIZC5A8sLr-k/preview" allow="autoplay"></iframe></div>
                 <div class="work-info">Love Songs Edit</div>
-          </div>
+            </div>
             <div class="work-card" data-aos="fade-up">
                 <div class="vid-frame"><iframe src="https://drive.google.com/file/d/1g4U0fnQDMlxEUtGla0eWsCP9gBGGr6ij/preview" allow="autoplay"></iframe></div>
-                <div class="work-info">Gangster Reels Edit</div>      
+                <div class="work-info">Gangster Reels Edit</div>
+            </div>
+        </div>
     </section> 
 
     <section id="booking">
@@ -179,7 +230,7 @@
                             <option value="Trending Edit">Trending Edit</option>
                             <option value="Other">Other</option>
                         </select>
-                    </div>
+                    </div> 
 
                     <div class="form-group"><label>Reference Link (Optional)</label><input type="url" id="rl"></div>
                     <button type="submit" class="btn-submit">SUBMIT VISION</button>
@@ -211,6 +262,3 @@
     </script>
 </body>
 </html>
-
-
-
