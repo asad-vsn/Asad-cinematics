@@ -31,28 +31,40 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* CAMERA LENS BACKGROUND ELEMENTS */
+        /* LIQUID GLASS TOP BAR - IPHONE STYLE */
+        .top-nav-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 65px;
+            background: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; align-items: center; padding: 0 25px; z-index: 10002;
+        }
+        .top-nav-bar .logo-wrapper { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 2px; display: flex; }
+        .top-nav-bar .logo-asad { color: #fff; }
+        .top-nav-bar .logo-cinematics { 
+            background: linear-gradient(180deg, #fff 0%, var(--gold) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-left: 8px; 
+        }
+
         .bg-lens {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 100vw; height: 100vw; border: 1px solid rgba(212,175,55,0.03);
             border-radius: 50%; z-index: -1; pointer-events: none;
         }
 
-        /* SECTION MANAGEMENT */
-        section { display: none; min-height: 100vh; padding: 60px 20px 140px 20px; }
+        section { display: none; min-height: 100vh; padding: 100px 20px 140px 20px; }
         section.active { display: block; animation: iosFade 0.8s ease; }
         @keyframes iosFade { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- HOME PAGE ELEMENTS (DEEP SCROLL) --- */
-        .hero-header { text-align: center; padding-top: 40px; margin-bottom: 50px; }
+        .hero-header { text-align: center; padding-top: 20px; margin-bottom: 50px; }
         
         .main-title {
-            font-family: 'Bebas Neue'; font-size: 6rem; letter-spacing: 15px;
-            background: linear-gradient(180deg, #fff 40%, var(--gold) 100%);
+            font-family: 'Bebas Neue'; font-size: 6.5rem; letter-spacing: 12px;
+            background: linear-gradient(180deg, #fff 30%, var(--gold) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        /* --- PROFILE LENS FOCUS EFFECT --- */
         .profile-container {
             position: relative; width: 280px; height: 280px; margin: 40px auto;
             display: flex; align-items: center; justify-content: center;
@@ -62,23 +74,14 @@
             border: 2px solid var(--gold); padding: 8px; position: relative; z-index: 5;
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
-        .lens-ring {
-            position: absolute; border: 1px dashed rgba(212, 175, 55, 0.4);
-            border-radius: 50%; pointer-events: none;
-        }
-        .ring-inner { width: 250px; height: 250px; animation: rotateLens 10s linear infinite; }
-        .ring-outer { width: 280px; height: 280px; border-style: solid; opacity: 0.1; animation: rotateLens 15s linear infinite reverse; }
         
         .rec-indicator {
             position: absolute; top: 10px; right: 20px; color: #ff0000;
             font-family: 'Bebas Neue'; font-size: 1rem; display: flex; align-items: center; gap: 5px; z-index: 10;
         }
         .dot { width: 8px; height: 8px; background: #ff0000; border-radius: 50%; animation: blinkRec 1s infinite; }
-
-        @keyframes rotateLens { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes blinkRec { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
-        /* GLOSSY BOXES */
         .gloss-card {
             background: var(--ios-gloss); 
             backdrop-filter: var(--ios-blur); -webkit-backdrop-filter: var(--ios-blur);
@@ -89,7 +92,6 @@
         .gloss-card h3 { font-family: 'Bebas Neue'; color: var(--gold); font-size: 2.5rem; margin-bottom: 20px; letter-spacing: 3px; }
         .gloss-card p { font-size: 1rem; line-height: 1.8; color: rgba(255,255,255,0.85); margin-bottom: 20px; text-align: justify; }
 
-        /* SKILL GRID */
         .skill-grid {
             display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-top: 30px;
         }
@@ -99,7 +101,6 @@
             text-align: center; color: var(--gold); transition: 0.3s;
         }
 
-        /* --- VISIONS GRID --- */
         .vision-container { display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 30px; }
         .vision-card {
             background: var(--ios-gloss); border: 1px solid var(--ios-border); border-radius: 40px;
@@ -108,7 +109,6 @@
         .vision-card iframe { width: 100%; height: 500px; border: none; }
         .vision-info { padding: 20px 30px; background: rgba(0,0,0,0.5); }
 
-        /* --- NAVIGATION --- */
         .nav-bar {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             width: 90%; max-width: 450px; 
@@ -123,7 +123,6 @@
         .nav-btn i { font-size: 1.4rem; margin-bottom: 5px; }
         .nav-btn.active { color: var(--gold); transform: translateY(-5px); }
 
-        /* FORM STYLE */
         .form-input {
             width: 100%; padding: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--ios-border);
             border-radius: 20px; color: #fff; margin-bottom: 20px; outline: none; font-size: 1rem;
@@ -133,41 +132,43 @@
             border-radius: 20px; font-family: 'Bebas Neue'; font-size: 1.8rem; cursor: pointer;
         }
 
-        @media (max-width: 600px) { .main-title { font-size: 4rem; } .vision-card iframe { height: 380px; } }
+        @media (max-width: 600px) { .main-title { font-size: 4.5rem; letter-spacing: 8px; } .vision-card iframe { height: 380px; } }
     </style>
 </head>
 <body>
+
+    <div class="top-nav-bar">
+        <div class="logo-wrapper">
+            <span class="logo-asad">ASAD</span>
+            <span class="logo-cinematics">CINEMATICS</span>
+        </div>
+    </div>
 
     <div class="bg-lens"></div>
 
     <section id="home" class="active">
         <div class="hero-header" data-aos="fade-down">
             <div class="main-title">ASAD</div>
-            <div style="font-family: 'Bebas Neue'; color: var(--gold); letter-spacing: 8px;">CINEMATIC ARCHITECT</div>
+            <div style="font-family: 'Bebas Neue'; color: var(--gold); letter-spacing: 8px; margin-top: -10px;">CINEMATIC ARCHITECT</div>
         </div>
 
         <div class="profile-container" data-aos="zoom-in">
             <div class="rec-indicator"><div class="dot"></div>REC</div>
-            <div class="lens-ring ring-inner"></div>
-            <div class="lens-ring ring-outer"></div>
             <img src="https://lh3.googleusercontent.com/d/1-v6EK-F_P_J5s-S7bQuPD3dBdKIKdro8" class="profile-pic" alt="Asad Ahmad">
         </div>
 
         <div class="gloss-card" data-aos="fade-up">
             <h3>THE VISIONARY JOURNEY</h3>
             <p>
-                Welcome to the digital sanctuary of Asad Ahmad, where raw storytelling meets cutting-edge cinematic execution. As a professional director and video editor, I don't just manipulate frames; I architect emotional experiences. My journey in the world of post-production is driven by a relentless pursuit of visual perfection. Every project I undertake is a deep dive into the essence of the narrative, ensuring that the rhythm, pace, and color palette align perfectly with the creator's intent.
-                <br><br>
-                With a specialized focus on high-end luxury aesthetics and dramatic storytelling, I have mastered the art of blending complex visual effects with soul-stirring sound design. Whether it’s a high-octane action sequence or a moody, atmospheric brand film, my goal is to push the boundaries of what’s possible in digital media. In a world saturated with content, I provide the 'Cinematic Edge' that transforms ordinary footage into a timeless masterpiece.
+                Welcome to the digital sanctuary of Asad Ahmad, where raw storytelling meets cutting-edge cinematic execution. As a professional director and video editor, I don't just manipulate frames; I architect emotional experiences.
             </p>
         </div>
 
         <div class="gloss-card" data-aos="fade-up">
             <h3>CRAFTING THE UNSEEN</h3>
             <p>
-                I specialize in the creation of premium visual content that demands attention. My expertise spans across cinematic reels that tell a story in seconds, high-fidelity movie intros that set the tone for greatness, and intricate character-driven montages. By utilizing advanced color grading techniques and surgical sound synchronization, I ensure that every deliverable is not just a video, but a brand statement. I craft visual metaphors, trending transitions with purpose, and cinematic textures that provide a deep, immersive experience for the global audience.
+                I specialize in the creation of premium visual content that demands attention. My expertise spans across cinematic reels, high-fidelity movie intros, and intricate character-driven montages.
             </p>
-
             <div class="skill-grid">
                 <div class="skill-box"><i class="fas fa-video"></i> CINEMATIC ART</div>
                 <div class="skill-box"><i class="fas fa-bolt"></i> DYNAMIC SYNC</div>
@@ -175,8 +176,6 @@
                 <div class="skill-box"><i class="fas fa-film"></i> FILM TEXTURE</div>
                 <div class="skill-box"><i class="fas fa-expand"></i> 4K RENDERING</div>
                 <div class="skill-box"><i class="fas fa-signature"></i> BRAND INTROS</div>
-                <div class="skill-box"><i class="fas fa-wave-square"></i> AUDIO DESIGN</div>
-                <div class="skill-box"><i class="fas fa-camera-retro"></i> VINTAGE FX</div>
             </div>
         </div>
     </section>
@@ -184,14 +183,17 @@
     <section id="projects">
         <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; text-align: center; margin-bottom: 50px;">SELECTED <span style="color: var(--gold);">VISIONS</span></h2>
         <div class="vision-container">
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1geQzj63zsFCzPYoerIcTtYfpE9aaF_49/preview"></iframe><div class="vision-info"><h4>01 // CINEMATIC FILM</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1FcOmfT0H0YWi04vXEcFvvXnj_gKVuLBa/preview"></iframe><div class="vision-info"><h4>02 // FILM INTRO</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1-KhpSc8mZplpU45T7DrvpcEBJwtNiy_K/preview"></iframe><div class="vision-info"><h4>03 // CHARACTER INTRO</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1JjKZ1OKkZeyifntmikRVwerHKUqvsWbA/preview"></iframe><div class="vision-info"><h4>04 // TRENDING REEL</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1QjPGaKbG2URlAbOxQ093rdswG0zpjSwQ/preview"></iframe><div class="vision-info"><h4>05 // AESTHETIC EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1X7K5wNto-F6lXogwbVwE1PAduNCfLjbQ/preview"></iframe><div class="vision-info"><h4>06 // KGF THEME</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1L7-lsXDHgYlH4nbVI8o7dadmbzxeGqEQ/preview"></iframe><div class="vision-info"><h4>07 // MASTER STYLE</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1bF3gRQO2nCfg5TwuMF5JNFUoxcqgBPUR/preview"></iframe><div class="vision-info"><h4>08 // SCENARIO EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1geQzj63zsFCzPYoerIcTtYfpE9aaF_49/preview"></iframe><div class="vision-info"><h4>01 // CINEMATIC FILM EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1FcOmfT0H0YWi04vXEcFvvXnj_gKVuLBa/preview"></iframe><div class="vision-info"><h4>02 // FILM INTRO SCENE EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1-KhpSc8mZplpU45T7DrvpcEBJwtNiy_K/preview"></iframe><div class="vision-info"><h4>03 // INTRODUCTION TO CHARACTER</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1JjKZ1OKkZeyifntmikRVwerHKUqvsWbA/preview"></iframe><div class="vision-info"><h4>04 // TRENDING REELS EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1QjPGaKbG2URlAbOxQ093rdswG0zpjSwQ/preview"></iframe><div class="vision-info"><h4>05 // CINEMATIC REEL EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1X7K5wNto-F6lXogwbVwE1PAduNCfLjbQ/preview"></iframe><div class="vision-info"><h4>06 // KGF-INSPIRED EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1L7-lsXDHgYlH4nbVI8o7dadmbzxeGqEQ/preview"></iframe><div class="vision-info"><h4>07 // CINEMATIC LOVE EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/11CPD5WxcUAtgvB-DMnFClUeOZy2r4v1w/preview"></iframe><div class="vision-info"><h4>08 // MASTER MOVIE STYLE EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1bF3gRQO2nCfg5TwuMF5JNFUoxcqgBPUR/preview"></iframe><div class="vision-info"><h4>09 // SCENARIO EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1G3EjzWG5_3OPc05m7JaWCIZC5A8sLr-k/preview"></iframe><div class="vision-info"><h4>10 // LOVE SONGS EDIT</h4></div></div>
+            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1g4U0fnQDMlxEUtGla0eWsCP9gBGGr6ij/preview"></iframe><div class="vision-info"><h4>11 // GANGSTER REEL EDIT</h4></div></div>
         </div>
     </section>
 
