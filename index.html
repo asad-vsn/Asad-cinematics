@@ -96,7 +96,6 @@
             text-align: center; color: var(--gold);
         }
 
-        /* REVIEW SECTION STYLES */
         .review-input-box {
             display: flex; gap: 10px; background: rgba(255,255,255,0.05);
             padding: 12px 20px; border-radius: 30px; border: 1px solid var(--ios-border);
@@ -109,6 +108,18 @@
             background: rgba(255,255,255,0.03); border: 1px solid var(--ios-border);
             padding: 20px; border-radius: 25px; margin-bottom: 15px; animation: iosFade 0.5s ease;
         }
+
+        /* NEW SUMMARY BOX STYLES */
+        .rating-summary-box {
+            display: flex; align-items: center; justify-content: center; gap: 25px;
+            background: rgba(255,255,255,0.04); padding: 25px; border-radius: 30px;
+            border: 1px solid var(--ios-border); margin-bottom: 30px;
+        }
+        .avg-num { font-size: 4.5rem; font-family: 'Bebas Neue'; line-height: 1; color: #fff; }
+        .progress-bar-container { flex: 1; max-width: 180px; }
+        .progress-line { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; font-size: 0.7rem; color: #888; }
+        .bar-bg { flex: 1; height: 5px; background: #222; border-radius: 10px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.8s ease; }
 
         .vision-container { display: grid; grid-template-columns: 1fr; gap: 40px; margin-top: 30px; }
         .vision-card { background: var(--ios-gloss); border: 1px solid var(--ios-border); border-radius: 40px; overflow: hidden; backdrop-filter: var(--ios-blur); }
@@ -132,7 +143,7 @@
         .form-input { width: 100%; padding: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--ios-border); border-radius: 20px; color: #fff; margin-bottom: 20px; outline: none; }
         .submit-btn { width: 100%; padding: 22px; background: var(--gold); border: none; border-radius: 20px; font-family: 'Bebas Neue'; font-size: 1.8rem; cursor: pointer; }
 
-        @media (max-width: 600px) { .main-title { font-size: 4.5rem; letter-spacing: 8px; } .vision-card iframe { height: 380px; } .nav-bar { width: 98%; padding: 10px; } }
+        @media (max-width: 600px) { .main-title { font-size: 4.5rem; letter-spacing: 8px; } .vision-card iframe { height: 380px; } .nav-bar { width: 98%; padding: 10px; } .rating-summary-box { flex-direction: column; gap: 15px; } }
     </style>
 </head>
 <body>
@@ -190,6 +201,20 @@
     <section id="reviews">
         <div class="gloss-card">
             <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem; text-align: center; margin-bottom: 10px;">CLIENT <span style="color: var(--gold);">REVIEWS</span></h2>
+            
+            <div class="rating-summary-box">
+                <div style="text-align: center;">
+                    <div class="avg-num" id="avgRating">0.0</div>
+                    <div style="color: var(--gold); margin: 5px 0;" id="avgStarsUI"></div>
+                    <div id="totalCount" style="font-size: 0.7rem; opacity: 0.5;">0 REVIEWS</div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-line">5 <div class="bar-bg"><div id="bar5" class="bar-fill"></div></div></div>
+                    <div class="progress-line">4 <div class="bar-bg"><div id="bar4" class="bar-fill"></div></div></div>
+                    <div class="progress-line">3 <div class="bar-bg"><div id="bar3" class="bar-fill"></div></div></div>
+                </div>
+            </div>
+
             <p style="text-align: center; opacity: 0.6; margin-bottom: 20px;">Share your experience with my vision.</p>
             
             <div class="star-rating">
@@ -293,12 +318,22 @@
             }
         }
 
+        // IMPROVED LOAD FUNCTION WITH AUTOMATIC CALCULATION
         function loadReviews() {
             db.on('value', snap => {
                 const list = document.getElementById('reviewList');
                 list.innerHTML = "";
+                
+                let totalStars = 0;
+                let count = 0;
+                let starTally = {5:0, 4:0, 3:0, 2:0, 1:0};
+
                 snap.forEach(child => {
                     const r = child.val();
+                    totalStars += r.rating;
+                    count++;
+                    starTally[r.rating]++;
+
                     list.innerHTML = `
                     <div class="review-card">
                         <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:var(--gold); font-size:1.2rem;">
@@ -308,6 +343,25 @@
                         <p style="margin-top:8px; opacity:0.8; font-size:0.9rem;">${r.message}</p>
                     </div>` + list.innerHTML;
                 });
+
+                if(count > 0) {
+                    const avg = (totalStars / count).toFixed(1);
+                    document.getElementById('avgRating').innerText = avg;
+                    document.getElementById('totalCount').innerText = `${count} REVIEWS`;
+                    
+                    // Update UI Stars
+                    let starIcons = "";
+                    for(let i=1; i<=5; i++) {
+                        starIcons += `<i class="fas fa-star" style="font-size:0.8rem; color:${i <= Math.round(avg) ? 'var(--gold)' : '#333'}"></i> `;
+                    }
+                    document.getElementById('avgStarsUI').innerHTML = starIcons;
+
+                    // Update Progress Bars
+                    for(let i=3; i<=5; i++) {
+                        let percent = (starTally[i] / count) * 100;
+                        document.getElementById(`bar${i}`).style.width = percent + "%";
+                    }
+                }
             });
         }
 
