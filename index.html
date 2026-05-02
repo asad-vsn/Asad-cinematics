@@ -30,6 +30,30 @@
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; scroll-behavior: smooth; }
 
+        /* --- NEW: FLOATING RATING BADGE --- */
+        .live-rating-badge {
+            position: fixed; top: 80px; left: 15px; z-index: 10005;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
+            border: 1px solid var(--ios-border); border-radius: 50px;
+            padding: 4px 10px; display: flex; align-items: center; gap: 5px;
+            font-family: 'Bebas Neue'; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            pointer-events: none; transition: 0.3s;
+        }
+        .live-rating-badge span { color: #fff; font-size: 1rem; letter-spacing: 1px; }
+        .live-rating-badge i { color: var(--gold); font-size: 0.8rem; }
+
+        /* --- NEW: STAR BLOW PARTICLES --- */
+        .star-particle {
+            position: fixed; pointer-events: none; z-index: 20000;
+            color: var(--gold); font-size: 6px; opacity: 0;
+            animation: blowOut 1.2s ease-out forwards;
+        }
+        @keyframes blowOut {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1); opacity: 0; }
+        }
+
         .top-nav-bar {
             position: fixed; top: 0; left: 0; width: 100%; height: 65px;
             background: rgba(0, 0, 0, 0.4); 
@@ -149,6 +173,11 @@
 </head>
 <body>
 
+    <div class="live-rating-badge" id="floatBadge">
+        <span id="badgeNum">0.0</span>
+        <i class="fas fa-star"></i>
+    </div>
+
     <div class="top-nav-bar">
         <div class="logo-wrapper"><span class="logo-asad">ASAD</span><span class="logo-cinematics">CINEMATICS</span></div>
     </div>
@@ -170,14 +199,11 @@
         </div>
         <div class="gloss-card" data-aos="fade-up">
             <h3>CRAFTING THE UNSEEN</h3>
-            <p>I specialize in the creation of premium visual content that demands attention. My expertise spans across cinematic reels, high-fidelity movie intros, and intricate character-driven montages.</p>
             <div class="skill-grid">
                 <div class="skill-box"><i class="fas fa-video"></i> CINEMATIC ART</div>
                 <div class="skill-box"><i class="fas fa-bolt"></i> DYNAMIC SYNC</div>
                 <div class="skill-box"><i class="fas fa-palette"></i> COLOR THEORY</div>
                 <div class="skill-box"><i class="fas fa-film"></i> FILM TEXTURE</div>
-                <div class="skill-box"><i class="fas fa-expand"></i> 4K RENDERING</div>
-                <div class="skill-box"><i class="fas fa-signature"></i> BRAND INTROS</div>
             </div>
         </div>
     </section>
@@ -189,20 +215,12 @@
             <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1FcOmfT0H0YWi04vXEcFvvXnj_gKVuLBa/preview"></iframe><div class="vision-info"><h4>02 // FILM INTRO SCENE EDIT</h4></div></div>
             <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1-KhpSc8mZplpU45T7DrvpcEBJwtNiy_K/preview"></iframe><div class="vision-info"><h4>03 // INTRODUCTION TO CHARACTER</h4></div></div>
             <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1JjKZ1OKkZeyifntmikRVwerHKUqvsWbA/preview"></iframe><div class="vision-info"><h4>04 // TRENDING REELS EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1QjPGaKbG2URlAbOxQ093rdswG0zpjSwQ/preview"></iframe><div class="vision-info"><h4>05 // CINEMATIC REEL EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1X7K5wNto-F6lXogwbVwE1PAduNCfLjbQ/preview"></iframe><div class="vision-info"><h4>06 // KGF-INSPIRED EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1L7-lsXDHgYlH4nbVI8o7dadmbzxeGqEQ/preview"></iframe><div class="vision-info"><h4>07 // CINEMATIC LOVE EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/11CPD5WxcUAtgvB-DMnFClUeOZy2r4v1w/preview"></iframe><div class="vision-info"><h4>08 // MASTER MOVIE STYLE EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1bF3gRQO2nCfg5TwuMF5JNFUoxcqgBPUR/preview"></iframe><div class="vision-info"><h4>09 // SCENARIO EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1G3EjzWG5_3OPc05m7JaWCIZC5A8sLr-k/preview"></iframe><div class="vision-info"><h4>10 // LOVE SONGS EDIT</h4></div></div>
-            <div class="vision-card" data-aos="fade-up"><iframe src="https://drive.google.com/file/d/1g4U0fnQDMlxEUtGla0eWsCP9gBGGr6ij/preview"></iframe><div class="vision-info"><h4>11 // GANGSTER REEL EDIT</h4></div></div>
         </div>
     </section>
 
     <section id="reviews">
         <div class="gloss-card">
             <h2 style="font-family: 'Bebas Neue'; font-size: 3.5rem; text-align: center; margin-bottom: 10px;">CLIENT <span style="color: var(--gold);">REVIEWS</span></h2>
-            
             <div class="rating-summary-box">
                 <div style="text-align: center;">
                     <div class="avg-num" id="avgRating">0.0</div>
@@ -215,9 +233,6 @@
                     <div class="progress-line">3 <div class="bar-bg"><div id="bar3" class="bar-fill"></div></div></div>
                 </div>
             </div>
-
-            <p style="text-align: center; opacity: 0.6; margin-bottom: 20px;">Share your experience with my vision.</p>
-            
             <div class="star-rating">
                 <i class="fas fa-star star-select" onclick="setStar(1)"></i>
                 <i class="fas fa-star star-select" onclick="setStar(2)"></i>
@@ -225,12 +240,10 @@
                 <i class="fas fa-star star-select" onclick="setStar(4)"></i>
                 <i class="fas fa-star star-select" onclick="setStar(5)"></i>
             </div>
-
             <div class="review-input-box">
                 <input type="text" id="userMsg" placeholder="Write a review...">
                 <button onclick="submitReview()" style="background:var(--gold); border:none; padding:10px 18px; border-radius:50px; cursor:pointer;"><i class="fas fa-paper-plane" style="color:#000;"></i></button>
             </div>
-
             <div id="reviewList" style="margin-top: 30px;"></div>
         </div>
     </section>
@@ -245,10 +258,7 @@
                     <option value="" disabled selected>CHOOSE EDIT STYLE</option>
                     <option value="Cinematic">CINEMATIC EDIT</option>
                     <option value="Trending">TRENDING EDIT</option>
-                    <option value="Corporate">BIRTHDAY EDITS</option>
-                    <option value="Other">OTHER VISION</option>
                 </select>
-                <input type="url" id="rl" class="form-input" placeholder="REFERENCE LINK (OPTIONAL)">
                 <button type="submit" class="submit-btn">SUBMIT REQUEST</button>
             </form>
         </div>
@@ -257,13 +267,9 @@
     <section id="contact">
         <div class="gloss-card" style="text-align: center; margin: 0 auto;">
             <h2 style="font-family: 'Bebas Neue'; font-size: 3rem; margin-bottom: 40px;">DIRECT <span style="color: var(--gold);">CHANNEL</span></h2>
-            <a href="mailto:ahmadashad545@gmail.com" style="display: block; padding: 30px; border: 1px solid var(--ios-border); border-radius: 30px; color: #fff; text-decoration: none; margin-bottom: 25px; background: rgba(255,255,255,0.03);">
+            <a href="mailto:ahmadashad545@gmail.com" style="display: block; padding: 30px; border: 1px solid var(--ios-border); border-radius: 30px; color: #fff; text-decoration: none; background: rgba(255,255,255,0.03);">
                 <i class="fas fa-envelope" style="color: var(--gold); font-size: 2rem; margin-bottom: 15px;"></i>
                 <p>ahmadashad545@gmail.com</p>
-            </a>
-            <a href="https://www.instagram.com/asad.vsn" target="_blank" style="display: block; padding: 30px; border: 1px solid var(--ios-border); border-radius: 30px; color: #fff; text-decoration: none; background: rgba(255,255,255,0.03);">
-                <i class="fab fa-instagram" style="color: var(--gold); font-size: 2rem; margin-bottom: 15px;"></i>
-                <p>@asad.vsn</p>
             </a>
         </div>
     </section>
@@ -282,6 +288,21 @@
 
     <script>
         AOS.init({ duration: 1000, once: true });
+
+        // --- STAR BLOW ANIMATION ON LOAD ---
+        window.addEventListener('load', () => {
+            const count = 35;
+            for(let i=0; i<count; i++) {
+                const star = document.createElement('i');
+                star.className = 'fas fa-star star-particle';
+                star.style.left = '50%'; star.style.top = '50%';
+                star.style.setProperty('--tx', (Math.random() - 0.5) * 1500 + 'px');
+                star.style.setProperty('--ty', (Math.random() - 0.5) * 1500 + 'px');
+                star.style.animationDelay = (Math.random() * 0.2) + 's';
+                document.body.appendChild(star);
+                setTimeout(() => star.remove(), 1300);
+            }
+        });
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTZ8I_Ue0SF741QwvpIozEAg_uDwhRy20",
@@ -304,47 +325,24 @@
             });
         }
 
-        // Logic for Likes, Edit, and Delete (Device Specific)
-        function likeReview(key) {
-            db.child(key + '/likes').transaction(c => (c || 0) + 1);
-        }
-
-        function deleteReview(key) {
-            if(confirm("Bhai, review delete karna hai?")) db.child(key).remove();
-        }
-
+        function likeReview(key) { db.child(key + '/likes').transaction(c => (c || 0) + 1); }
+        function deleteReview(key) { if(confirm("Bhai, review delete karna hai?")) db.child(key).remove(); }
         function editReview(key, oldMsg) {
             const newMsg = prompt("Edit your review:", oldMsg);
-            if(newMsg && newMsg.trim() !== "" && newMsg !== oldMsg) {
-                db.child(key).update({ message: newMsg });
-            }
+            if(newMsg && newMsg.trim() !== "") db.child(key).update({ message: newMsg });
         }
 
         function submitReview() {
             const msg = document.getElementById('userMsg').value;
-            if(selectedRating === 0) { alert("Rating select karlo bhai! ⭐"); return; }
-            if(!msg.trim()) return;
+            if(selectedRating === 0 || !msg.trim()) return;
             const name = prompt("Enter your Name:");
             if(name) {
                 const newRef = db.push();
-                const reviewId = newRef.key;
-                
-                newRef.set({ 
-                    name, 
-                    rating: selectedRating, 
-                    message: msg, 
-                    likes: 0,
-                    timestamp: Date.now() 
-                });
-
-                // Save review ID to this device
+                newRef.set({ name, rating: selectedRating, message: msg, likes: 0, timestamp: Date.now() });
                 let myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
-                myReviews.push(reviewId);
+                myReviews.push(newRef.key);
                 localStorage.setItem('my_posted_reviews', JSON.stringify(myReviews));
-
-                document.getElementById('userMsg').value = "";
-                setStar(0);
-                alert("Review Added Successfully! 🔥");
+                document.getElementById('userMsg').value = ""; setStar(0);
             }
         }
 
@@ -352,7 +350,6 @@
             db.on('value', snap => {
                 const list = document.getElementById('reviewList');
                 list.innerHTML = "";
-                
                 let totalStars = 0, count = 0;
                 let starTally = {5:0, 4:0, 3:0, 2:0, 1:0};
                 const myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
@@ -360,37 +357,26 @@
                 snap.forEach(child => {
                     const r = child.val();
                     const key = child.key;
-                    totalStars += r.rating;
-                    count++;
-                    starTally[r.rating]++;
-
+                    totalStars += r.rating; count++; starTally[r.rating]++;
                     const isMyReview = myReviews.includes(key);
 
                     list.innerHTML = `
                     <div class="review-card">
-                        <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:var(--gold); font-size:1.2rem;">
+                        <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:var(--gold);">
                             <span>${r.name}</span>
-                            <div style="display:flex; align-items:center; gap:10px;">
-                                ${isMyReview ? `
-                                    <i class="fas fa-edit" onclick="editReview('${key}', '${r.message}')" style="cursor:pointer; font-size:0.85rem; color:#888;"></i>
-                                    <i class="fas fa-trash" onclick="deleteReview('${key}')" style="cursor:pointer; font-size:0.85rem; color:#ff4444;"></i>
-                                ` : ''}
+                            <div>
+                                ${isMyReview ? `<i class="fas fa-edit" onclick="editReview('${key}', '${r.message}')" style="margin-right:10px; opacity:0.5;"></i><i class="fas fa-trash" onclick="deleteReview('${key}')" style="color:#ff4444; opacity:0.7; margin-right:10px;"></i>` : ''}
                                 <span>${r.rating} ★</span>
                             </div>
                         </div>
-                        <p style="margin-top:8px; opacity:0.8; font-size:0.9rem; line-height:1.4;">${r.message}</p>
-                        <div style="margin-top:12px; display:flex; align-items:center; gap:8px;">
-                            <button onclick="likeReview('${key}')" style="background:rgba(212,175,55,0.1); border:none; color:var(--gold); padding:4px 10px; border-radius:12px; cursor:pointer; font-size:0.75rem;">
-                                <i class="fas fa-thumbs-up"></i> ${r.likes || 0}
-                            </button>
-                            <span style="font-size:0.6rem; opacity:0.3; text-transform:uppercase;">Helpful</span>
-                        </div>
+                        <p style="margin-top:5px; opacity:0.8; font-size:0.9rem;">${r.message}</p>
                     </div>` + list.innerHTML;
                 });
 
                 if(count > 0) {
                     const avg = (totalStars / count).toFixed(1);
                     document.getElementById('avgRating').innerText = avg;
+                    document.getElementById('badgeNum').innerText = avg; // UPDATE FLOATING BADGE
                     document.getElementById('totalCount').innerText = `${count} REVIEWS`;
                     
                     let starIcons = "";
@@ -413,12 +399,14 @@
             document.getElementById(id).classList.add('active');
             btn.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            if(id === 'reviews') loadReviews();
         }
+
+        // Auto Load for floating badge number
+        loadReviews();
 
         document.getElementById('finalForm').onsubmit = function(e) {
             e.preventDefault();
-            const text = `New Booking:\nName: ${document.getElementById('fn').value}\nStyle: ${document.getElementById('et').value}`;
+            const text = `Booking: ${document.getElementById('fn').value}\nStyle: ${document.getElementById('et').value}`;
             window.open(`https://wa.me/9717494691?text=${encodeURIComponent(text)}`, '_blank');
         };
     </script>
