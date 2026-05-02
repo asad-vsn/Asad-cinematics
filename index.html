@@ -104,12 +104,13 @@
         .review-input-box input { flex: 1; background: none; border: none; color: #fff; outline: none; font-size: 1rem; }
         .star-rating { display: flex; justify-content: center; gap: 15px; margin: 25px 0; font-size: 2rem; color: #333; }
         .star-select.selected { color: var(--gold); text-shadow: 0 0 15px rgba(212,175,55,0.5); }
+        
         .review-card {
             background: rgba(255,255,255,0.03); border: 1px solid var(--ios-border);
             padding: 20px; border-radius: 25px; margin-bottom: 15px; animation: iosFade 0.5s ease;
+            position: relative;
         }
 
-        /* NEW SUMMARY BOX STYLES */
         .rating-summary-box {
             display: flex; align-items: center; justify-content: center; gap: 25px;
             background: rgba(255,255,255,0.04); padding: 25px; border-radius: 30px;
@@ -230,8 +231,7 @@
                 <button onclick="submitReview()" style="background:var(--gold); border:none; padding:10px 18px; border-radius:50px; cursor:pointer;"><i class="fas fa-paper-plane" style="color:#000;"></i></button>
             </div>
 
-            <div id="reviewList" style="margin-top: 30px;">
-                </div>
+            <div id="reviewList" style="margin-top: 30px;"></div>
         </div>
     </section>
 
@@ -283,7 +283,6 @@
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        // Firebase Connection
         const firebaseConfig = {
             apiKey: "AIzaSyDTZ8I_Ue0SF741QwvpIozEAg_uDwhRy20",
             authDomain: "asad-vsn.firebaseapp.com",
@@ -305,42 +304,87 @@
             });
         }
 
+        // Logic for Likes, Edit, and Delete (Device Specific)
+        function likeReview(key) {
+            db.child(key + '/likes').transaction(c => (c || 0) + 1);
+        }
+
+        function deleteReview(key) {
+            if(confirm("Bhai, review delete karna hai?")) db.child(key).remove();
+        }
+
+        function editReview(key, oldMsg) {
+            const newMsg = prompt("Edit your review:", oldMsg);
+            if(newMsg && newMsg.trim() !== "" && newMsg !== oldMsg) {
+                db.child(key).update({ message: newMsg });
+            }
+        }
+
         function submitReview() {
             const msg = document.getElementById('userMsg').value;
             if(selectedRating === 0) { alert("Rating select karlo bhai! ⭐"); return; }
             if(!msg.trim()) return;
             const name = prompt("Enter your Name:");
             if(name) {
-                db.push().set({ name, rating: selectedRating, message: msg, timestamp: Date.now() });
+                const newRef = db.push();
+                const reviewId = newRef.key;
+                
+                newRef.set({ 
+                    name, 
+                    rating: selectedRating, 
+                    message: msg, 
+                    likes: 0,
+                    timestamp: Date.now() 
+                });
+
+                // Save review ID to this device
+                let myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
+                myReviews.push(reviewId);
+                localStorage.setItem('my_posted_reviews', JSON.stringify(myReviews));
+
                 document.getElementById('userMsg').value = "";
                 setStar(0);
                 alert("Review Added Successfully! 🔥");
             }
         }
 
-        // IMPROVED LOAD FUNCTION WITH AUTOMATIC CALCULATION
         function loadReviews() {
             db.on('value', snap => {
                 const list = document.getElementById('reviewList');
                 list.innerHTML = "";
                 
-                let totalStars = 0;
-                let count = 0;
+                let totalStars = 0, count = 0;
                 let starTally = {5:0, 4:0, 3:0, 2:0, 1:0};
+                const myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
 
                 snap.forEach(child => {
                     const r = child.val();
+                    const key = child.key;
                     totalStars += r.rating;
                     count++;
                     starTally[r.rating]++;
+
+                    const isMyReview = myReviews.includes(key);
 
                     list.innerHTML = `
                     <div class="review-card">
                         <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:var(--gold); font-size:1.2rem;">
                             <span>${r.name}</span>
-                            <span>${r.rating} ★</span>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                ${isMyReview ? `
+                                    <i class="fas fa-edit" onclick="editReview('${key}', '${r.message}')" style="cursor:pointer; font-size:0.85rem; color:#888;"></i>
+                                    <i class="fas fa-trash" onclick="deleteReview('${key}')" style="cursor:pointer; font-size:0.85rem; color:#ff4444;"></i>
+                                ` : ''}
+                                <span>${r.rating} ★</span>
+                            </div>
                         </div>
-                        <p style="margin-top:8px; opacity:0.8; font-size:0.9rem;">${r.message}</p>
+                        <p style="margin-top:8px; opacity:0.8; font-size:0.9rem; line-height:1.4;">${r.message}</p>
+                        <div style="margin-top:12px; display:flex; align-items:center; gap:8px;">
+                            <button onclick="likeReview('${key}')" style="background:rgba(212,175,55,0.1); border:none; color:var(--gold); padding:4px 10px; border-radius:12px; cursor:pointer; font-size:0.75rem;">
+                                <i class="fas fa-thumbs-up"></i> ${r.likes || 0}
+                            </button>
+                            <span style="font-size:0.6rem; opacity:0.3; text-transform:uppercase;">Helpful</span>
+                        </div>
                     </div>` + list.innerHTML;
                 });
 
@@ -349,14 +393,12 @@
                     document.getElementById('avgRating').innerText = avg;
                     document.getElementById('totalCount').innerText = `${count} REVIEWS`;
                     
-                    // Update UI Stars
                     let starIcons = "";
                     for(let i=1; i<=5; i++) {
                         starIcons += `<i class="fas fa-star" style="font-size:0.8rem; color:${i <= Math.round(avg) ? 'var(--gold)' : '#333'}"></i> `;
                     }
                     document.getElementById('avgStarsUI').innerHTML = starIcons;
 
-                    // Update Progress Bars
                     for(let i=3; i<=5; i++) {
                         let percent = (starTally[i] / count) * 100;
                         document.getElementById(`bar${i}`).style.width = percent + "%";
