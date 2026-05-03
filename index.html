@@ -37,7 +37,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex; align-items: center; padding: 0 25px; z-index: 10002;
         }
-        .top-nav-bar .logo-wrapper { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 2px; display: flex; }
+        .top-nav-bar .logo-wrapper { font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 2px; display: flex; cursor: pointer; }
         .top-nav-bar .logo-asad { color: #fff; }
         .top-nav-bar .logo-cinematics { 
             background: linear-gradient(180deg, #fff 0%, var(--gold) 100%);
@@ -150,7 +150,7 @@
 <body>
 
     <div class="top-nav-bar">
-        <div class="logo-wrapper"><span class="logo-asad">ASAD</span><span class="logo-cinematics">CINEMATICS</span></div>
+        <div class="logo-wrapper" id="adminTrigger"><span class="logo-asad">ASAD</span><span class="logo-cinematics">CINEMATICS</span></div>
     </div>
 
     <div class="bg-lens"></div>
@@ -302,6 +302,10 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database().ref("reviews");
 
+        // --- ADMIN & VALIDATION LOGIC ---
+        let isAdmin = false;
+        const ADMIN_PASS = "742811";
+
         let selectedRating = 0;
         function setStar(n) {
             selectedRating = n;
@@ -310,7 +314,6 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
             });
         }
 
-        // Logic for Likes, Edit, and Delete (Device Specific)
         function likeReview(key) {
             db.child(key + '/likes').transaction(c => (c || 0) + 1);
         }
@@ -326,32 +329,51 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
             }
         }
 
+        function verifyClient(key) {
+            db.child(key).update({ verified: true });
+        }
+
         function submitReview() {
             const msg = document.getElementById('userMsg').value;
             if(selectedRating === 0) { alert("Rating select karlo bhai! ⭐"); return; }
             if(!msg.trim()) return;
-            const name = prompt("Enter your Name:");
-            if(name) {
-                const newRef = db.push();
-                const reviewId = newRef.key;
-                
-                newRef.set({ 
-                    name, 
-                    rating: selectedRating, 
-                    message: msg, 
-                    likes: 0,
-                    timestamp: Date.now() 
-                });
 
-                // Save review ID to this device
-                let myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
-                myReviews.push(reviewId);
-                localStorage.setItem('my_posted_reviews', JSON.stringify(myReviews));
-
-                document.getElementById('userMsg').value = "";
-                setStar(0);
-                alert("Review Added Successfully! 🔥");
+            const email = prompt("Enter your Email (One review per email):");
+            if(!email || !email.includes('@')) {
+                alert("Valid Email zaroori hai bhai!");
+                return;
             }
+
+            // CHECK FOR DUPLICATE EMAIL
+            db.orderByChild('email').equalTo(email).once('value', snapshot => {
+                if (snapshot.exists()) {
+                    alert("Is email se pehle hi review diya ja chuka hai! Ek banda ek hi review de sakta hai. 🙏");
+                } else {
+                    const name = prompt("Enter your Name:");
+                    if(name) {
+                        const newRef = db.push();
+                        const reviewId = newRef.key;
+                        
+                        newRef.set({ 
+                            name, 
+                            email,
+                            rating: selectedRating, 
+                            message: msg, 
+                            verified: false,
+                            likes: 0,
+                            timestamp: Date.now() 
+                        });
+
+                        let myReviews = JSON.parse(localStorage.getItem('my_posted_reviews') || "[]");
+                        myReviews.push(reviewId);
+                        localStorage.setItem('my_posted_reviews', JSON.stringify(myReviews));
+
+                        document.getElementById('userMsg').value = "";
+                        setStar(0);
+                        alert("Review Added Successfully! 🔥");
+                    }
+                }
+            });
         }
 
         function loadReviews() {
@@ -371,13 +393,14 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
                     starTally[r.rating]++;
 
                     const isMyReview = myReviews.includes(key);
+                    const cardStyle = r.verified ? 'border: 1px solid var(--gold); box-shadow: 0 0 15px rgba(212,175,55,0.1);' : '';
 
                     list.innerHTML = `
-                    <div class="review-card">
-                        <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:var(--gold); font-size:1.2rem;">
-                            <span>${r.name}</span>
+                    <div class="review-card" style="${cardStyle}">
+                        <div style="display:flex; justify-content:space-between; font-family:'Bebas Neue'; color:${r.verified ? 'var(--gold)' : '#fff'}; font-size:1.2rem;">
+                            <span>${r.name} ${r.verified ? '<i class="fas fa-check-circle" style="font-size:0.8rem; margin-left:5px;"></i>' : ''}</span>
                             <div style="display:flex; align-items:center; gap:10px;">
-                                ${isMyReview ? `
+                                ${isMyReview || isAdmin ? `
                                     <i class="fas fa-edit" onclick="editReview('${key}', '${r.message}')" style="cursor:pointer; font-size:0.85rem; color:#888;"></i>
                                     <i class="fas fa-trash" onclick="deleteReview('${key}')" style="cursor:pointer; font-size:0.85rem; color:#ff4444;"></i>
                                 ` : ''}
@@ -385,11 +408,15 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
                             </div>
                         </div>
                         <p style="margin-top:8px; opacity:0.8; font-size:0.9rem; line-height:1.4;">${r.message}</p>
+                        
+                        ${isAdmin && !r.verified ? `
+                            <button onclick="verifyClient('${key}')" style="width:100%; margin-top:10px; background:#4BB543; border:none; color:#fff; padding:8px; border-radius:10px; cursor:pointer; font-family:'Bebas Neue';">VERIFY CLIENT ✅</button>
+                        ` : ''}
+
                         <div style="margin-top:12px; display:flex; align-items:center; gap:8px;">
                             <button onclick="likeReview('${key}')" style="background:rgba(212,175,55,0.1); border:none; color:var(--gold); padding:4px 10px; border-radius:12px; cursor:pointer; font-size:0.75rem;">
                                 <i class="fas fa-thumbs-up"></i> ${r.likes || 0}
                             </button>
-                            <span style="font-size:0.6rem; opacity:0.3; text-transform:uppercase;">Helpful</span>
                         </div>
                     </div>` + list.innerHTML;
                 });
@@ -411,6 +438,23 @@ Every project is handled with attention to detail, ensuring smooth flow, strong 
                     }
                 }
             });
+        }
+
+        // Admin Trigger: 'v' key or Long Press on Logo
+        window.onkeydown = (e) => { if(e.key.toLowerCase() === 'v') triggerAdmin(); };
+
+        let logoTimer;
+        document.getElementById('adminTrigger').addEventListener('touchstart', () => {
+            logoTimer = setTimeout(triggerAdmin, 3000); 
+        });
+        document.getElementById('adminTrigger').addEventListener('touchend', () => clearTimeout(logoTimer));
+
+        function triggerAdmin() {
+            if(prompt("Admin Password?") === ADMIN_PASS) {
+                isAdmin = true;
+                loadReviews(); 
+                alert("ASAD ADMIN MODE: ON 🔥");
+            }
         }
 
         function showSection(id, btn) {
